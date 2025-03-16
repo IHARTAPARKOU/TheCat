@@ -12,4 +12,7 @@ public class ConfigurationService(IConfiguration configuration) : IConfiguration
 
     public string TheCatApiBaseUri => configuration["TheCatApi:BaseUri"]
         ?? throw new InvalidOperationException($"{nameof(TheCatApiBaseUri)} is not found in the configuration.");
+
+    public string TheCatImagesUri => configuration["TheCatResources:Images"]
+        ?? throw new InvalidOperationException($"{nameof(TheCatImagesUri)} is not found in the configuration.");
 }

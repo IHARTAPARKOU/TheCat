@@ -18,4 +18,10 @@ public class ConnectionServiceTests(ConfigurationFixture configuration) : IClass
     {
         Assert.Equal("https://api.thecatapi.com/v1", connectionService.TheCatApiBaseUri);
     }
+
+    [Fact]
+    public void TheCatImagesUriTest()
+    {
+        Assert.Equal("https://cdn2.thecatapi.com/images", connectionService.TheCatImagesUri);
+    }
 }
