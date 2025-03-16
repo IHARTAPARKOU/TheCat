@@ -1,9 +1,12 @@
 ﻿using DataAccess.Repositories.Abstractions;
+using DataAccess.Services.Abstractions;
 
 namespace DataAccess.Repositories;
 
-public class ImagesRepository(HttpClient httpClient, string directoryPath) : IImagesRepository
+public class ImagesRepository(HttpClient httpClient, IConfigurationService configurationService) : IImagesRepository
 {
+    private readonly string directoryPath = configurationService.TheCatImagesCache;
+
     public async Task<string> GetAsync(string url, CancellationToken token)
     {
         if (string.IsNullOrWhiteSpace(url))

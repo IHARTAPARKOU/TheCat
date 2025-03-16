@@ -5,17 +5,25 @@ using Tests.Integration.Fixtures;
 
 namespace Tests.Integration.Repositories;
 
-public class ImagesRepositoryTests(ConfigurationFixture configuration) : IClassFixture<ConfigurationFixture>
+public class ImagesRepositoryTests : IClassFixture<ConfigurationFixture>
 {
-    private readonly ConfigurationService configurationService = new(configuration.Configuration);
-    private readonly string testDirectory = Path.Combine(Directory.GetCurrentDirectory(), "TestImages");
+    private readonly ConfigurationFixture configuration;
+    private readonly ConfigurationService configurationService;
+    private readonly string testDirectory;
+
+    public ImagesRepositoryTests(ConfigurationFixture configuration)
+    {
+        this.configuration = configuration;
+        configurationService = new(configuration.Configuration);
+        testDirectory = configurationService.TheCatImagesCache;
+    }
 
     [Fact]
     public async Task GetAsyncThrowWhenUrlIsEmptyTest()
     {
-        var httpClientMock = new Mock<HttpClient>();
-        var repository = new ImagesRepository(httpClientMock.Object, testDirectory);
 
+        var httpClientMock = new Mock<HttpClient>();
+        var repository = new ImagesRepository(httpClientMock.Object, configurationService);
         await Assert.ThrowsAsync<ArgumentNullException>(() => repository.GetAsync(string.Empty, CancellationToken.None));
     }
 
@@ -31,7 +39,7 @@ public class ImagesRepositoryTests(ConfigurationFixture configuration) : IClassF
             await File.WriteAllBytesAsync(filePath, [1, 2, 3]);
 
             var httpClientMock = new Mock<HttpClient>();
-            var repository = new ImagesRepository(httpClientMock.Object, testDirectory);
+            var repository = new ImagesRepository(httpClientMock.Object, configurationService);
             var result = await repository.GetAsync(filePath, CancellationToken.None);
 
             Assert.Equal(filePath, result);
@@ -50,7 +58,7 @@ public class ImagesRepositoryTests(ConfigurationFixture configuration) : IClassF
             var imageUrl = configurationService.TheCatImagesUri + "/0XYvRd7oD.jpg";
             var fileName = Path.GetFileName(imageUrl);
             var filePath = Path.Combine(testDirectory, fileName);
-            var repository = new ImagesRepository(configuration.HttpClient, testDirectory);
+            var repository = new ImagesRepository(configuration.HttpClient, configurationService);
 
             var result = await repository.GetAsync(imageUrl, CancellationToken.None);
 

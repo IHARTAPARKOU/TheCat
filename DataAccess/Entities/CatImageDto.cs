@@ -3,7 +3,7 @@ using DataAccess.Entities.Abstractions;
 
 namespace DataAccess.Entities;
 
-public class CatImage : IBaseEntity
+public class CatImageDto : IBaseEntity
 {
     [JsonPropertyName("id")]
     public string? Id { get; init; }

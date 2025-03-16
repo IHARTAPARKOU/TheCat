@@ -3,7 +3,7 @@ using DataAccess.Entities.Abstractions;
 
 namespace DataAccess.Entities;
 
-public class CatBreed : IBaseEntity
+public class CatBreedDto : IBaseEntity
 {
     [JsonPropertyName("id")]
     public string? Id { get; init; }
@@ -114,12 +114,12 @@ public class CatBreed : IBaseEntity
     public string? ReferenceImageId { get; init; }
 
     [JsonPropertyName("image")]
-    public CatImage? Image { get; init; }
+    public CatImageDto? Image { get; init; }
 
     [JsonPropertyName("weight")]
-    public WeightModel? Weight { get; init; }
+    public WeightDto? Weight { get; init; }
 
-    public class WeightModel
+    public class WeightDto
     {
         [JsonPropertyName("imperial")]
         public string? Imperial { get; init; }

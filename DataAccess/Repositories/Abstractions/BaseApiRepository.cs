@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text.Json;
 using DataAccess.Entities.Abstractions;
 using DataAccess.Services.Abstractions;
@@ -7,13 +6,10 @@ using DataAccess.Services.Abstractions;
 namespace DataAccess.Repositories.Abstractions;
 
 public abstract class BaseApiRepository<T>(HttpClient httpClient, IConfigurationService configurationService)
-    : IBaseApiRepository<T> where T : IBaseEntity, new()
+    : BaseRepository<T>, IBaseApiRepository<T> where T : IBaseEntity, new()
 {
-    protected readonly ConcurrentDictionary<string, T> Cache = [];
-
     protected string ApiKey => configurationService.TheCatApiKey;
     protected abstract string BaseUri { get; }
-    protected virtual bool IsNeedToCache => false;
 
     public virtual async Task<T?> GetByIdAsync(string id, CancellationToken token)
     {
@@ -51,26 +47,5 @@ public abstract class BaseApiRepository<T>(HttpClient httpClient, IConfiguration
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync(token);
-    }
-
-    private void AddToCache(IEnumerable<T> items)
-    {
-        foreach (var item in items)
-        {
-            AddToCache(item);
-        }
-    }
-
-    private void AddToCache(T? item)
-    {
-        if (IsNeedToCache == false)
-        {
-            return;
-        }
-
-        if (item?.Id is not null && Cache.ContainsKey(item.Id) == false)
-        {
-            Cache[item.Id] = item;
-        }
     }
 }
