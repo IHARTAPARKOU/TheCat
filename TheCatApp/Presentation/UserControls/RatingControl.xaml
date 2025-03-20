@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="TheCatApp.Presentation.UserControls.RatingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:TheCatApp.Presentation.Converters">
+    <UserControl.Resources>
+        <converters:IntToStarsConverter x:Key="RatingConverter" />
+
+        <Style x:Key="RatingTextBlock" TargetType="TextBlock" BasedOn="{StaticResource StarTextBlock}">
+            <Setter Property="Foreground" Value="{StaticResource BasicColor}" />
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   Margin="5,0"/>
+        <TextBlock Text="{Binding Rating, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource RatingConverter}}"
+                   Style="{StaticResource RatingTextBlock}"/>
+    </StackPanel>
+</UserControl>

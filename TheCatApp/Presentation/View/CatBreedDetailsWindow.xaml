@@ -1,0 +1,47 @@
+﻿<Window x:Class="TheCatApp.Presentation.View.CatBreedDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheCatApp.Presentation.View"
+        xmlns:vm="clr-namespace:TheCatApp.Presentation.ViewModels"
+        xmlns:uc="clr-namespace:TheCatApp.Presentation.UserControls"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:CatBreedDetailsViewModel}"
+        Title="{Binding Name, StringFormat='About: {0}'}" Width="500" >
+    <Window.Resources>
+        <Style x:Key="RatingButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="{StaticResource BasicColor}" />
+        </Style>
+    </Window.Resources>
+    <StackPanel Margin="10">
+        <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="Bold" />
+        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" FontSize="16" />
+        <TextBlock Text="{Binding Origin, StringFormat='Origin: {0}'}" />
+        <TextBlock Text="{Binding LifeSpan, StringFormat='Life span: {0}'}" />
+        <uc:RatingControl Title="Health Issues" Rating="{Binding HealthIssues}" />
+        <uc:RatingControl Title="Intelligence" Rating="{Binding Intelligence}" />
+        <uc:RatingControl Title="Social Needs" Rating="{Binding SheddingLevel}" />
+
+        <Image Source="{Binding PhotoUrl}" Stretch="Uniform" Height="200" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Wikipedia" Style="{StaticResource RatingButton}" Command="{Binding OpenLinkCommand}" />
+            <Button Command="{Binding FavoriteCommand}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource RatingButton}">
+                        <Setter Property="Content" Value="Add to Favorites" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                <Setter Property="Content" Value="Remove from Favorites" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Save" Style="{StaticResource RatingButton}" Command="{Binding SaveCommand}" />
+        </StackPanel>
+        
+    </StackPanel>
+</Window>
